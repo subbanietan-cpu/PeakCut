@@ -111,7 +111,7 @@ on_clip_ready: list = []   # callbacks (job, clip), run once when a clip first f
 DEFAULTS = {"max_clips": 6, "min_len": 15, "max_len": 60, "style": "bounce", "layout": "blur", "quality": 720,
             "range_start": None, "range_end": None, "captions": True, "hook_text": "", "description_text": "",
             "lang": "en",        # lang: the language spoken
-            "template": "", "cap_lang": ""}   # cap_lang: the captions' language ("" is the language spoken)
+            "template": "", "cap_lang": "","focus":""}   # cap_lang: the captions' language ("" is the language spoken)
 
 
 LIMITS = {"max_clips": (1, 20), "min_len": (5, 120), "max_len": (10, 180), "quality": (360, 2160)}
@@ -128,6 +128,9 @@ def clean_options(options) -> dict:
             continue
         if k in ("hook_text", "description_text"):     # kept even when empty: it clears the creator's own text for this video
             out[k] = creators.clean_hook(v) if k == "hook_text" else creators.clean_description(v)
+            continue
+        if k == "focus":
+            out[k] = str(v).strip()[:2000]
             continue
         if k not in DEFAULTS or v in ("", None):
             continue
